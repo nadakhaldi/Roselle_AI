@@ -1,7 +1,7 @@
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score , confusion_matrix
 
 data = load_breast_cancer()
 X = data.data
@@ -16,3 +16,4 @@ model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, predictions))
+print(confusion_matrix(y_test, predictions))
