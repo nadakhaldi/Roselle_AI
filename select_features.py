@@ -52,3 +52,18 @@ def scan(columns, label):
 
 scan(chosen, "8 features")
 scan(chosen10, "10 features")
+
+X_train, X_test, y_train, y_test = train_test_split(
+    df[chosen10], y, test_size=0.2, random_state=42
+)
+model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=10000))
+model.fit(X_train, y_train)
+proba = model.predict_proba(X_test)[:, 1]
+
+for t in [0.55, 0.6, 0.65, 0.7, 0.75]:
+    pred = (proba >= t).astype(int)
+    cm = confusion_matrix(y_test, pred)
+    print("10 features | threshold", t,
+          "| missed malignant:", cm[0][1],
+          "| false alarms:", cm[1][0])
+    
