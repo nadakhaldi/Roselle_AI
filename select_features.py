@@ -33,3 +33,22 @@ def run(columns, label):
 
 run(list(data.feature_names), "all 30 features")
 run(chosen, "8 chosen features")
+
+chosen10 = chosen + ["mean area", "mean fractal dimension"]
+
+def scan(columns, label):
+    X_train, X_test, y_train, y_test = train_test_split(
+        df[columns], y, test_size=0.2, random_state=42
+    )
+    model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=10000))
+    model.fit(X_train, y_train)
+    proba = model.predict_proba(X_test)[:, 1]
+    for t in [0.5, 0.7, 0.8, 0.9]:
+        pred = (proba >= t).astype(int)
+        cm = confusion_matrix(y_test, pred)
+        print(label, "| threshold", t,
+              "| missed malignant:", cm[0][1],
+              "| false alarms:", cm[1][0])
+
+scan(chosen, "8 features")
+scan(chosen10, "10 features")
