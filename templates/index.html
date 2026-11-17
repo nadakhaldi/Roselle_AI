@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>API test</title></head>
+<body>
+  <button id="test">Test the model</button>            
+  <pre id="out"></pre>                                  
+  <script>
+    const sample = {                                    
+      "mean radius": 17.99, "mean perimeter": 122.8, "mean area": 1001,
+      "mean compactness": 0.2776, "mean concavity": 0.3001,
+      "mean concave points": 0.1471, "mean symmetry": 0.2419,
+      "mean fractal dimension": 0.07871, "mean texture": 10.38,
+      "mean smoothness": 0.1184
+    };
+    document.getElementById("test").onclick = async () => {     
+      const res = await fetch("/api/predict", {                  
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sample)
+      });
+      document.getElementById("out").textContent =               
+        JSON.stringify(await res.json(), null, 2);
+    };
+  </script>
+</body>
+</html>
